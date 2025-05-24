@@ -1,0 +1,273 @@
+/* Allgemeine Stile */
+:root {
+    --primary-color: #007bff; /* Ein helles Blau */
+    --secondary-color: #0056b3; /* Ein dunkleres Blau */
+    --background-gradient-start: #007bff; /* Startfarbe des Hintergrundverlaufs */
+    --background-gradient-end: #00c6ff;   /* Endfarbe des Hintergrundverlaufs */
+    --text-color: #fff; /* Weiße Textfarbe für den Haupttitel */
+    --dark-overlay: rgba(0, 0, 0, 0.3); /* Leicht dunkler Überzug */
+
+    /* Farben für das Absperrband: Rot, Weiß und Schwarz für den Text */
+    --banner-red: #E74C3C; /* Kräftiges Rot */
+    --banner-white: #FFFFFF; /* Reines Weiß */
+    --banner-text-color: #000; /* Textfarbe: Schwarz! */
+}
+
+body {
+    font-family: 'Kanit', sans-serif; /* Kanit Font */
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, var(--background-gradient-start) 0%, var(--background-gradient-end) 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden; /* Verhindert Scrollbalken durch das Laufband */
+    color: var(--text-color);
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--dark-overlay);
+    z-index: 1;
+}
+
+.main-container {
+    position: relative; /* Wichtig für absolute Positionierung des Laufbands */
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    max-width: 800px;
+    padding: 40px 20px;
+    padding-bottom: 120px; /* Platz für das bewegte Absperrband am unteren Rand */
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    text-align: center;
+
+    /* ANIMATION FÜR MORPH-EFFEKT */
+    opacity: 0;
+    transform-origin: center bottom;
+    animation: morphIn 1.8s forwards ease-out;
+}
+
+@keyframes morphIn {
+    from {
+        opacity: 0;
+        transform: translateY(150px) scaleY(0.1) scaleX(0.8) rotateX(45deg);
+    }
+    30% {
+        opacity: 1;
+        transform: translateY(-20px) scaleY(1.05) scaleX(1.02) rotateX(-5deg);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1) rotateX(0deg);
+    }
+}
+
+.logo {
+    height: 80px;
+    margin-bottom: 30px;
+    object-fit: contain;
+    transition: transform 0.3s ease-in-out;
+    transform: rotate(0deg); /* Stellt sicher, dass das Logo im Ruhezustand gerade ist */
+}
+
+.logo:hover {
+    transform: scale(1.05) rotate(2deg); /* Hier dreht es sich beim Hovern */
+}
+
+h1 {
+    color: var(--text-color);
+    margin: 0;
+    font-size: 4em;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.support-text {
+    color: var(--text-color);
+    font-size: 1.2em;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+stripe-buy-button {
+    margin-top: 20px; /* Abstand zum Text, angepasst für die Musikprojekte */
+    margin-bottom: 20px; /* Abstand zum Laufband */
+}
+
+
+/* --- LAUFENDES ABSPERRBAND IM CONTAINER --- */
+.running-barricade-wrapper {
+    position: absolute; /* Absolut positioniert innerhalb des main-containers */
+    bottom: 0; /* Am unteren Rand des main-containers */
+    left: 0;
+    width: 100%; /* Volle Breite des main-containers */
+    height: 100px; /* Höhe des sichtbaren Bereichs des Laufbands */
+    overflow: hidden; /* Wichtig! Schneidet den überstehenden Inhalt ab */
+    border-bottom-left-radius: 20px; /* Abgerundete Ecken passend zum Container */
+    border-bottom-right-radius: 20px; /* Abgerundete Ecken passend zum Container */
+    border-top: 3px solid var(--banner-red); /* Roter Rand oben */
+    box-shadow: inset 0 5px 10px rgba(0, 0, 0, 0.2); /* Innenliegender Schatten */
+    background-color: var(--banner-white); /* Hintergrundfarbe für die Streifen, falls Text sich überlappt */
+    display: flex; /* Für die vertikale Zentrierung des Inhalts */
+    align-items: center; /* Vertikal zentriert den Inhalt */
+}
+
+.running-barricade-content {
+    /* Dieses Element ist der tatsächlich sich bewegende Inhalt */
+    display: inline-block; /* Wichtig für die Breite */
+    white-space: nowrap; /* Verhindert Zeilenumbrüche */
+    /* Den Inhalt oft genug wiederholen, damit er über die Containerbreite reicht */
+    min-width: 200%; /* Stelle sicher, dass es breit genug ist, um den Wiederholungseffekt zu haben */
+
+    /* Absperrband-Effekt im Hintergrund */
+    background: repeating-linear-gradient(
+        -45deg, /* Diagonale Streifen */
+        var(--banner-red),
+        var(--banner-red) 30px, /* Breite des roten Streifens */
+        var(--banner-white) 30px,
+        var(--banner-white) 60px /* Breite des weißen Streifens (insgesamt 60px pro Musterwiederholung) */
+    );
+    padding: 0 20px; /* Etwas horizontaler Abstand für den Text */
+    height: 100%; /* Füllt die Höhe des Wrappers */
+    display: flex; /* Für die Textzentrierung im Inhalt */
+    align-items: center; /* Vertikal zentriert den Text */
+    justify-content: flex-start; /* Oder flex-start, um den Text am Anfang zu halten */
+
+    /* Animation für die horizontale Bewegung */
+    animation: marquee 15s linear infinite; /* 15 Sekunden Dauer, linear, unendlich */
+}
+
+/* Keyframes für die Lauftext-Animation */
+@keyframes marquee {
+    from {
+        transform: translateX(0%); /* Startposition */
+    }
+    to {
+        transform: translateX(-50%); /* Bewegt sich nach links um die Hälfte der Breite des Inhalts */
+    }
+}
+
+/* Text innerhalb des Laufbands */
+.running-barricade-content .barricade-text {
+    color: var(--banner-text-color); /* Textfarbe ist Schwarz! */
+    font-size: 1.6em; /* Große Schrift für gute Lesbarkeit */
+    font-weight: 700;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8), /* Weißer Schatten für roten Hintergrund */
+                -1px -1px 3px rgba(0, 0, 0, 0.3); /* Schwarzer Schatten für weißen Hintergrund */
+}
+
+/* Zusätzliche Stile für Musikprojekte */
+.music-project {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    text-align: left;
+    width: 100%;
+    max-width: 600px; /* Maximale Breite für einzelne Projekte */
+    transition: transform 0.2s ease-in-out;
+}
+
+.music-project:hover {
+    transform: translateY(-5px);
+}
+
+.music-project h2 {
+    color: var(--text-color);
+    font-size: 1.8em;
+    margin-top: 0;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+}
+
+.music-project p {
+    color: var(--text-color);
+    font-size: 1em;
+    margin-bottom: 15px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.music-project audio {
+    width: 100%;
+    max-width: 100%; /* Stellt sicher, dass der Player innerhalb des Containers bleibt */
+    background-color: rgba(0, 0, 0, 0.3); /* Dunklerer Hintergrund für den Player */
+    border-radius: 5px;
+    outline: none; /* Entfernt den Fokusrahmen */
+    filter: invert(1); /* Macht den Player weiß */
+}
+
+
+/* Responsive Anpassungen */
+@media (max-width: 768px) {
+    .main-container {
+        padding: 30px 15px;
+        padding-bottom: 100px; /* Platz für Band auf Tablets */
+        border-radius: 15px;
+    }
+    .logo {
+        height: 60px;
+        margin-bottom: 25px;
+    }
+    h1 {
+        font-size: 3em;
+        letter-spacing: 2px;
+    }
+    .support-text {
+        font-size: 1.1em;
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+    .running-barricade-wrapper {
+        height: 80px; /* Höhe des Bands auf Tablets */
+    }
+    .running-barricade-content .barricade-text {
+        font-size: 1.4em;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-container {
+        padding: 20px 10px;
+        padding-bottom: 80px; /* Platz für Band auf Smartphones */
+        border-radius: 10px;
+    }
+    .logo {
+        height: 50px;
+        margin-bottom: 20px;
+    }
+    h1 {
+        font-size: 2.2em;
+        letter-spacing: 1px;
+    }
+    .support-text {
+        font-size: 1em;
+        margin-top: 20px;
+        margin-bottom: 8px;
+    }
+    .running-barricade-wrapper {
+        height: 60px; /* Höhe des Bands auf Smartphones */
+    }
+    .running-barricade-content .barricade-text {
+        font-size: 1.2em;
+    }
+}
